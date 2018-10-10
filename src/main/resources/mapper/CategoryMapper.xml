@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sugar.demo.dao.CategoryDao">
+
+    <resultMap id="CategoryMap" type="com.sugar.demo.dto.CategoryDto">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="super_category_id" property="superCategoryId" jdbcType="INTEGER"/>
+        <collection column="id" property="children" javaType="java.util.ArrayList"
+                    ofType="com.sugar.demo.dto.CategoryDto" select="findChildren"/>
+    </resultMap>
+
+    <select id="findCategory" resultMap="CategoryMap">
+        select *
+        from category
+         where super_category_id = 0
+    </select>
+
+    <select id="findChildren" resultMap="CategoryMap">
+        select *
+        from category
+        where super_category_id = #{id}
+    </select>
+</mapper>
